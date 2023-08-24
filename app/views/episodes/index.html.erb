@@ -6,9 +6,9 @@
   <% @episodes.each do |episode| %>
     <%= render episode %>
     <p>
-      <%= link_to "Show this episode", episode %>
+      <%= link_to "Event detail", episode %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New episode", new_episode_path %>
+<%= link_to "New Event", new_episode_path %>
