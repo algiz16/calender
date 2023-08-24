@@ -1,0 +1,35 @@
+<body>
+  <section>
+    <div class="form-box">
+      <div class="form-value">
+        <h2>Login</h2>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="inputbox">
+            <ion-icon name="mail-outline"></ion-icon>
+            <%= f.label :email %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+          </div>
+          <div class="inputbox">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <%= f.label :password %><br />
+            <%= f.password_field :password, autocomplete: "current-password" %>
+          </div>
+          <% if devise_mapping.rememberable? %>
+            <div class="forget checkbox">
+              <%= f.check_box :remember_me %>
+              <%= f.label :remember_me %>
+            </div>
+          <% end %>
+          <div class="loginbutton">
+            <%= f.submit "Log in" %>
+          </div>
+        <% end %>
+        <div class="register">
+          <p>Don't have a account <%= render "devise/shared/links" %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
