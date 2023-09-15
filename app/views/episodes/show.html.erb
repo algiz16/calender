@@ -1,10 +1,9 @@
 <p style="color: green"><%= notice %></p>
-
 <%= render @episode %>
-
-<div>
-  <%= link_to "Edit this event", edit_episode_path(@episode) %> |
-  <%= link_to "Event list", episodes_path %>
-
-  <%= button_to "Delete Event", @episode, method: :delete %>
-</div>
+<% if current_user %>
+  <div>
+    <%= link_to "Edit this event", edit_episode_path(@episode) %> |
+    <%= link_to "Event list", episodes_path %>
+    <%= button_to "Delete Event", @episode, method: :delete %>
+  </div>
+<% end %>

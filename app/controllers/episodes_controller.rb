@@ -1,31 +1,31 @@
 class EpisodesController < ApplicationController
-  before_action :set_episode, only: %i[ show edit update destroy ]
-
+  before_action :set_episode, only: %i[show edit update destroy]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :correct_user, only: %i[edit update destroy]
   # GET /episodes or /episodes.json
   def index
     @episodes = Episode.all
   end
 
   # GET /episodes/1 or /episodes/1.json
-  def show
-  end
+  def show; end
 
   # GET /episodes/new
   def new
-    @episode = Episode.new
+    # @episode = Episode.new
+    @episode = current_user.episodes.build
   end
 
   # GET /episodes/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /episodes or /episodes.json
   def create
-    @episode = Episode.new(episode_params)
-
+    # @episode = Episode.new(episode_params)
+    @episode = current_user.episodes.build(episode_params)
     respond_to do |format|
       if @episode.save
-        format.html { redirect_to episode_url(@episode), notice: "Episode was successfully created." }
+        format.html { redirect_to episode_url(@episode), notice: 'Episode was successfully created.' }
         format.json { render :show, status: :created, location: @episode }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class EpisodesController < ApplicationController
   def update
     respond_to do |format|
       if @episode.update(episode_params)
-        format.html { redirect_to episode_url(@episode), notice: "Episode was successfully updated." }
+        format.html { redirect_to episode_url(@episode), notice: 'Episode was successfully updated.' }
         format.json { render :show, status: :ok, location: @episode }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,19 +52,25 @@ class EpisodesController < ApplicationController
     @episode.destroy
 
     respond_to do |format|
-      format.html { redirect_to episodes_url, notice: "Episode was successfully destroyed." }
+      format.html { redirect_to episodes_url, notice: 'Episode was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_episode
-      @episode = Episode.find(params[:id])
-    end
+  def correct_user
+    @episode = current_user.episodes.find_by(id: params[:id])
+    redirect_to root_path, notice: 'Not authorized to Edit this Event' if @episode.nil?
+  end
 
-    # Only allow a list of trusted parameters through.
-    def episode_params
-      params.require(:episode).permit(:title, :description, :start_time, :end_time)
-    end
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_episode
+    @episode = Episode.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def episode_params
+    params.require(:episode).permit(:title, :description, :start_time, :end_time)
+  end
 end
